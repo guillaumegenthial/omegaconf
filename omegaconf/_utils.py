@@ -273,7 +273,13 @@ def is_attr_class(obj: Any) -> bool:
     return attr.has(obj)
 
 
+_IS_STRUCTURED_CONFIG = "_IS_STRUCTURED_CONFIG"
+
+
 def is_structured_config(obj: Any) -> bool:
+    from .omegaconf import ListConfig, DictConfig
+    if not isinstance(obj, (ListConfig, DictConfig)) and hasattr(obj, _IS_STRUCTURED_CONFIG):
+        return getattr(obj, _IS_STRUCTURED_CONFIG)
     return is_attr_class(obj) or is_dataclass(obj)
 
 
